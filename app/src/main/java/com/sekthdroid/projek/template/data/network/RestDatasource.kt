@@ -1,15 +1,11 @@
 package com.sekthdroid.projek.template.data.network
 
-import com.sekthdroid.projek.template.data.ApiResponse
-import com.sekthdroid.projek.template.data.CharacterApiModel
-import com.sekthdroid.projek.template.data.EpisodeApiModel
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.http.ParametersBuilder
 import io.ktor.http.URLBuilder
 import io.ktor.http.appendPathSegments
-import io.ktor.http.path
 
 class RestDatasource(
     private val client: HttpClient
@@ -40,7 +36,7 @@ class RestDatasource(
 
     suspend fun getEpisodes(vararg ids: Int) : List<EpisodeApiModel> {
         val url = URLBuilder("https://rickandmortyapi.com/api/episode")
-            .appendPathSegments(ids.joinToString())
+            .appendPathSegments("[${ids.joinToString()}]")
             .build()
 
         return client.get(url).body()

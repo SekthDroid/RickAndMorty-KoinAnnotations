@@ -58,14 +58,14 @@ fun CharacterDetailScreen(viewModel: CharacterViewModel, onBackPressed: () -> Un
                     modifier = Modifier.padding(horizontal = 16.dp)
                 ) {
                     Text(text = "Origin", style = MaterialTheme.typography.headlineSmall)
-                    Text(text = it.name)
+                    Text(text = it.origin)
                 }
 
                 Column(
                     modifier = Modifier.padding(horizontal = 16.dp)
                 ) {
                     Text(text = "Location", style = MaterialTheme.typography.headlineSmall)
-                    Text(text = it.name)
+                    Text(text = it.location)
                 }
 
                 Column(

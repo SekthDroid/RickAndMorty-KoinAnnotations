@@ -1,5 +1,6 @@
-package com.sekthdroid.projek.template.data
+package com.sekthdroid.projek.template.data.network
 
+import com.sekthdroid.projek.template.domain.model.Episode
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -12,3 +13,7 @@ data class EpisodeApiModel(
     val name: String,
     val url: String
 )
+
+fun EpisodeApiModel.toEpisode(): Episode {
+    return Episode(id, name, episode)
+}

@@ -3,22 +3,22 @@ package com.sekthdroid.projek.template.ui.screens.characters
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.sekthdroid.projek.template.data.CharacterApiModel
-import com.sekthdroid.projek.template.data.network.RestDatasource
 import com.sekthdroid.projek.template.di.Injector
+import com.sekthdroid.projek.template.domain.CharactersRepository
+import com.sekthdroid.projek.template.domain.model.SerieCharacter
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 data class CharactersScreenState(
-    val items: List<CharacterApiModel> = emptyList(),
+    val items: List<SerieCharacter> = emptyList(),
     val isLoading: Boolean = true,
     val error: Throwable? = null
 )
 
 class CharactersViewModel(
-    private val datasource: RestDatasource
+    private val repository: CharactersRepository
 ) : ViewModel() {
     private val _state = MutableStateFlow(CharactersScreenState())
     val state: StateFlow<CharactersScreenState>
@@ -26,7 +26,7 @@ class CharactersViewModel(
 
     init {
         viewModelScope.launch {
-            val characters = datasource.getCharacters()
+            val characters = repository.getCharacters()
             _state.update {
                 it.copy(isLoading = false, items = it.items.plus(characters))
             }
@@ -36,8 +36,7 @@ class CharactersViewModel(
     fun fetchMore() {
         viewModelScope.launch {
             val currentPage = _state.value.items.size / 20 + 1
-            val characters = datasource.getCharacters(currentPage)
-            println("fetchMore with page $currentPage")
+            val characters = repository.getCharacters(currentPage)
             _state.update {
                 it.copy(isLoading = false, items = it.items.plus(characters))
             }
@@ -49,7 +48,7 @@ class CharactersViewModel(
 class CharactersViewModelFactory : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(CharactersViewModel::class.java)) {
-            return CharactersViewModel(Injector.restDatasource) as T
+            return CharactersViewModel(Injector.charactersRepository) as T
         }
         throw IllegalArgumentException()
     }

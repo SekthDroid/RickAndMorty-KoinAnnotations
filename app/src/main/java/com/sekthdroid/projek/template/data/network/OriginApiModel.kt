@@ -1,9 +1,9 @@
-package com.sekthdroid.projek.template.data
+package com.sekthdroid.projek.template.data.network
 
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class LocationApiModel(
+data class OriginApiModel(
     val name: String,
     val url: String
 )

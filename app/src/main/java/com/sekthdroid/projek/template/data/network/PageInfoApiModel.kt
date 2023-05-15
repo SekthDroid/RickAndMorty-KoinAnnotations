@@ -1,4 +1,4 @@
-package com.sekthdroid.projek.template.data
+package com.sekthdroid.projek.template.data.network
 
 import kotlinx.serialization.Serializable
 
