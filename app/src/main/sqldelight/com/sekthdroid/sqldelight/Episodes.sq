@@ -1,0 +1,24 @@
+CREATE TABLE Episodes
+(
+    id INTEGER PRIMARY KEY ,
+    name TEXT NOT NULL,
+    episode TEXT NOT NULL
+);
+
+getFromCharacter:
+SELECT epi.id, epi.name, epi.episode
+FROM Episodes epi
+WHERE epi.id IN (SELECT episodeId FROM CharacterEpisodes WHERE characterId = ?);
+
+createEpisode {
+    INSERT OR REPLACE INTO Episodes (id, name, episode) VALUES (?, ?, ?);
+    INSERT INTO CharacterEpisodes (characterId, episodeId) VALUES (?, ?);
+}
+
+deleteEpisode {
+    DELETE FROM Episodes
+    WHERE id IN (SELECT episodeId FROM CharacterEpisodes WHERE characterId = ?);
+
+    DELETE FROM CharacterEpisodes
+    WHERE characterId = ?;
+}

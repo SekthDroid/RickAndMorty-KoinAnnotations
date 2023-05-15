@@ -4,6 +4,15 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     kotlin("plugin.serialization")
+    id("app.cash.sqldelight") version "2.0.0-alpha05"
+}
+
+sqldelight {
+    databases {
+        create("Database") {
+            packageName.set("com.sekthdroid")
+        }
+    }
 }
 
 android {
@@ -76,6 +85,9 @@ dependencies {
 
     // Serialization
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
+
+    // Sql
+    implementation("app.cash.sqldelight:android-driver:2.0.0-alpha05")
 
     // Network
     val ktorVersion = "2.3.0"

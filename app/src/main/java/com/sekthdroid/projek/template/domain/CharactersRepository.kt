@@ -1,20 +1,21 @@
 package com.sekthdroid.projek.template.domain
 
-import com.sekthdroid.projek.template.data.memory.MemoryDatasource
 import com.sekthdroid.projek.template.data.network.RestDatasource
 import com.sekthdroid.projek.template.data.network.toCharacter
 import com.sekthdroid.projek.template.data.network.toEpisode
+import com.sekthdroid.projek.template.data.sql.LocalDatasource
 import com.sekthdroid.projek.template.domain.model.Episode
 import com.sekthdroid.projek.template.domain.model.SerieCharacter
 
 class CharactersRepository(
     private val networkDatasource: RestDatasource,
-    private val memoryDatasource: MemoryDatasource
+    private val sqliteDatasource: LocalDatasource
 ) {
     suspend fun getCharacters(page: Int = 0): List<SerieCharacter> {
         val apiPage = if (page == 1) 0 else page
 
-        val memory = memoryDatasource.getCharacters().chunked(20)
+        val memory = sqliteDatasource.getCharacters().chunked(20)
+        println("In database ${memory.size}")
         val candidates = memory.getOrNull(apiPage).orEmpty()
         if (candidates.isNotEmpty()) {
             return candidates
@@ -22,15 +23,15 @@ class CharactersRepository(
 
         return networkDatasource.getCharacters(apiPage)
             .map { it.toCharacter() }
-            .also { memoryDatasource.put(it) }
+            .also { sqliteDatasource.create(*it.toTypedArray()) }
     }
 
     suspend fun getCharacter(character: Int): SerieCharacter? {
-        return memoryDatasource.getCharacters().find { it.id == character }
+        return sqliteDatasource.getCharacter(character)
     }
 
     suspend fun getEpisodes(characterId: Int): List<Episode> {
-        val episodes = memoryDatasource.getEpisodes(characterId)
+        val episodes = sqliteDatasource.getEpisodes(characterId)
         if (episodes.isEmpty()) {
             val episodeIds = networkDatasource.getCharacter(characterId)
                 ?.episode.orEmpty()
@@ -39,7 +40,7 @@ class CharactersRepository(
 
             return networkDatasource.getEpisodes(*episodeIds)
                 .map { it.toEpisode() }
-                .also { memoryDatasource.put(characterId, it) }
+                .also { sqliteDatasource.create(characterId, it) }
         }
         return episodes
     }

@@ -2,8 +2,11 @@ package com.sekthdroid.projek.template.di
 
 import android.content.Context
 import android.util.Log
+import app.cash.sqldelight.driver.android.AndroidSqliteDriver
+import com.sekthdroid.Database
 import com.sekthdroid.projek.template.data.memory.MemoryDatasource
 import com.sekthdroid.projek.template.data.network.RestDatasource
+import com.sekthdroid.projek.template.data.sql.LocalDatasource
 import com.sekthdroid.projek.template.domain.CharactersRepository
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -45,7 +48,15 @@ object Injector {
         RestDatasource(httpClient)
     }
 
+    val sqliteDatasource by lazy {
+        LocalDatasource(database)
+    }
+
     val charactersRepository by lazy {
-        CharactersRepository(restDatasource, MemoryDatasource())
+        CharactersRepository(restDatasource, sqliteDatasource)
+    }
+
+    val database by lazy {
+        Database(AndroidSqliteDriver(Database.Schema, appContext, "app.db"))
     }
 }
