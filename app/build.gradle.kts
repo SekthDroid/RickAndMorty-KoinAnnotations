@@ -55,6 +55,7 @@ android {
         kotlinOptions {
             freeCompilerArgs += "-Xopt-in=kotlin.RequiresOptIn"
             freeCompilerArgs += "-Xopt-in=androidx.compose.material3.ExperimentalMaterial3Api"
+            freeCompilerArgs += "-Xopt-in=androidx.compose.foundation.layout.ExperimentalLayoutApi"
         }
     }
 }
@@ -71,14 +72,12 @@ dependencies {
     implementation("androidx.compose.material3:material3")
     implementation("io.coil-kt:coil-compose:2.3.0")
 
-    implementation ("com.google.accompanist:accompanist-navigation-animation:0.31.2-alpha")
-
+    implementation("com.google.accompanist:accompanist-navigation-animation:0.30.1")
 
     // Serialization
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
 
     // Network
-
     val ktorVersion = "2.3.0"
     implementation("io.ktor:ktor-client-core:$ktorVersion")
     implementation("io.ktor:ktor-client-okhttp:$ktorVersion")

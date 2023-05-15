@@ -6,6 +6,10 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -15,15 +19,20 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavType
+import androidx.navigation.navArgument
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
+import com.sekthdroid.projek.template.ui.screens.character.CharacterDetailScreen
+import com.sekthdroid.projek.template.ui.screens.character.CharacterViewModelFactory
 import com.sekthdroid.projek.template.ui.screens.characters.CharactersScreen
 import com.sekthdroid.projek.template.ui.screens.characters.CharactersViewModelFactory
 import com.sekthdroid.projek.template.ui.theme.ProjektTemplateTheme
 
 @OptIn(ExperimentalAnimationApi::class)
 class MainActivity : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -41,9 +50,34 @@ class MainActivity : ComponentActivity() {
                     ) {
                         composable("characters") {
                             CharactersScreen(
-                                viewModel = viewModel(factory =CharactersViewModelFactory()),
+                                viewModel = viewModel(factory = CharactersViewModelFactory()),
                                 onCharacterClicked = {
-                                    println("Clicked on character")
+                                    println("Navigation clicked")
+                                    navController.navigate("character/${it}")
+                                }
+                            )
+                        }
+                        composable(
+                            route = "character/{id}",
+                            arguments = listOf(navArgument("id") { type = NavType.IntType }),
+                            enterTransition = {
+                                slideInHorizontally { it }
+                            },
+                            exitTransition = {
+                                slideOutHorizontally { -it }
+                            },
+                            popEnterTransition = {
+                                slideInHorizontally { -it }
+                            },
+                            popExitTransition = {
+                                slideOutHorizontally { it }
+                            },
+                        ) {
+                            val id = it.arguments?.getInt("id")
+                            CharacterDetailScreen(
+                                viewModel = viewModel(factory = CharacterViewModelFactory(id)),
+                                onBackPressed = {
+                                    navController.popBackStack()
                                 }
                             )
                         }
@@ -53,9 +87,6 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-
-
-
 
 
 @Composable
