@@ -42,14 +42,15 @@ class CharactersViewModel(
             }
         }
     }
-}
 
-@Suppress("UNCHECKED_CAST")
-class CharactersViewModelFactory : ViewModelProvider.Factory {
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(CharactersViewModel::class.java)) {
-            return CharactersViewModel(Injector.charactersRepository) as T
+    companion object {
+        @Suppress("UNCHECKED_CAST")
+        val Factory = object : ViewModelProvider.Factory {
+            override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                return CharactersViewModel(
+                    Injector.charactersRepository
+                ) as T
+            }
         }
-        throw IllegalArgumentException()
     }
 }

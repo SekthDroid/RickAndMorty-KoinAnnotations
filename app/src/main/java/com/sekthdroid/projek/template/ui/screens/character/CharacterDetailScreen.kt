@@ -23,7 +23,7 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 
 @Composable
-fun CharacterDetailScreen(viewModel: CharacterViewModel, onBackPressed: () -> Unit) {
+fun CharacterDetailScreen(viewModel: CharacterDetailViewModel, onBackPressed: () -> Unit) {
     val state by viewModel.state.collectAsState()
     Scaffold(
         topBar = {

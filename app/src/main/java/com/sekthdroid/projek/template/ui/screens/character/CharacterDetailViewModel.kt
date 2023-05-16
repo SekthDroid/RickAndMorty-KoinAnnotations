@@ -1,8 +1,11 @@
 package com.sekthdroid.projek.template.ui.screens.character
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.CreationExtras
 import com.sekthdroid.projek.template.di.Injector
 import com.sekthdroid.projek.template.domain.CharactersRepository
 import com.sekthdroid.projek.template.domain.model.Episode
@@ -18,34 +21,43 @@ data class CharacterScreenState(
     val episodes: List<Episode> = emptyList()
 )
 
-class CharacterViewModel(
+class CharacterDetailViewModel(
     private val repository: CharactersRepository,
-    private val id: Int? = null
+    private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(CharacterScreenState())
     val state: StateFlow<CharacterScreenState>
         get() = _state
 
+    private val characterId: Int
+        get() = savedStateHandle.get<Int>("id") ?: -1
+
     init {
         viewModelScope.launch {
-            val character = repository.getCharacter(id ?: -1)
+            val character = repository.getCharacter(characterId)
             _state.update {
                 it.copy(character = character)
             }
 
-            val episodes = repository.getEpisodes(id ?: 0)
+            val episodes = repository.getEpisodes(characterId)
             _state.update {
                 it.copy(episodes = episodes)
             }
         }
     }
-}
 
-class CharacterViewModelFactory(private val id: Int?) : ViewModelProvider.Factory {
-
-    @Suppress("UNCHECKED_CAST")
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return CharacterViewModel(Injector.charactersRepository, id) as T
+    companion object {
+        fun create(characterId: Int?) = object : ViewModelProvider.Factory {
+            override fun <T : ViewModel> create(modelClass: Class<T>, extras: CreationExtras): T {
+                val savedStateHandle = extras.createSavedStateHandle().also {
+                    it["id"] = characterId
+                }
+                return CharacterDetailViewModel(
+                    Injector.charactersRepository,
+                    savedStateHandle
+                ) as T
+            }
+        }
     }
 }
