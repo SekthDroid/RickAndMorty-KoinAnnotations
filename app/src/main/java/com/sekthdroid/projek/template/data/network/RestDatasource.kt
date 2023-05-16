@@ -7,12 +7,22 @@ import io.ktor.http.ParametersBuilder
 import io.ktor.http.URLBuilder
 import io.ktor.http.appendPathSegments
 
+enum class Endpoints(val path: String) {
+    Characters("character"),
+    Episodes("episode");
+
+    fun build(baseUrl: String): String {
+        return "$baseUrl/$path"
+    }
+}
+
 class RestDatasource(
-    private val client: HttpClient
+    private val client: HttpClient,
+    private val baseUrl: String = "https://rickandmortyapi.com/api"
 ) {
 
     suspend fun getCharacters(page: Int = 0): List<CharacterApiModel> {
-        val url = URLBuilder("https://rickandmortyapi.com/api/character")
+        val url = URLBuilder(Endpoints.Characters.build(baseUrl))
             .apply {
                 if (page != 0) {
                     encodedParameters = ParametersBuilder().apply {
@@ -22,20 +32,20 @@ class RestDatasource(
             }
             .build()
 
-        val response = client.get(url).body<ApiResponse>()
+        val response = client.get(url).body<PagedApiResponse>()
         return response.results
     }
 
-    suspend fun getCharacter(value: Int) : CharacterApiModel? {
-        val url = URLBuilder("https://rickandmortyapi.com/api/character")
+    suspend fun getCharacter(value: Int): CharacterApiModel? {
+        val url = URLBuilder(Endpoints.Characters.build(baseUrl))
             .appendPathSegments(value.toString())
             .build()
 
         return client.get(url).body()
     }
 
-    suspend fun getEpisodes(vararg ids: Int) : List<EpisodeApiModel> {
-        val url = URLBuilder("https://rickandmortyapi.com/api/episode")
+    suspend fun getEpisodes(vararg ids: Int): List<EpisodeApiModel> {
+        val url = URLBuilder(Endpoints.Episodes.build(baseUrl))
             .appendPathSegments("[${ids.joinToString()}]")
             .build()
 

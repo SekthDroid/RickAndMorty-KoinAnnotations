@@ -3,13 +3,13 @@ package com.sekthdroid.projek.template.domain
 import com.sekthdroid.projek.template.data.network.RestDatasource
 import com.sekthdroid.projek.template.data.network.toCharacter
 import com.sekthdroid.projek.template.data.network.toEpisode
-import com.sekthdroid.projek.template.data.sql.LocalDatasource
+import com.sekthdroid.projek.template.data.sql.SqliteDatasource
 import com.sekthdroid.projek.template.domain.model.Episode
 import com.sekthdroid.projek.template.domain.model.SerieCharacter
 
 class CharactersRepository(
     private val networkDatasource: RestDatasource,
-    private val sqliteDatasource: LocalDatasource
+    private val sqliteDatasource: SqliteDatasource
 ) {
     suspend fun getCharacters(page: Int = 0): List<SerieCharacter> {
         val apiPage = if (page == 1) 0 else page

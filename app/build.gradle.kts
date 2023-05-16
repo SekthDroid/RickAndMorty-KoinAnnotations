@@ -10,7 +10,7 @@ plugins {
 sqldelight {
     databases {
         create("Database") {
-            packageName.set("com.sekthdroid")
+            packageName.set("com.sekthdroid.projekt.data")
         }
     }
 }
