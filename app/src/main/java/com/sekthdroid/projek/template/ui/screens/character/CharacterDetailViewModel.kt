@@ -2,11 +2,7 @@ package com.sekthdroid.projek.template.ui.screens.character
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.CreationExtras
-import com.sekthdroid.projek.template.di.Injector
 import com.sekthdroid.projek.template.domain.CharactersRepository
 import com.sekthdroid.projek.template.domain.model.Episode
 import com.sekthdroid.projek.template.domain.model.SerieCharacter
@@ -43,20 +39,6 @@ class CharacterDetailViewModel(
             val episodes = repository.getEpisodes(characterId)
             _state.update {
                 it.copy(episodes = episodes)
-            }
-        }
-    }
-
-    companion object {
-        fun create(characterId: Int?) = object : ViewModelProvider.Factory {
-            override fun <T : ViewModel> create(modelClass: Class<T>, extras: CreationExtras): T {
-                val savedStateHandle = extras.createSavedStateHandle().also {
-                    it["id"] = characterId
-                }
-                return CharacterDetailViewModel(
-                    Injector.charactersRepository,
-                    savedStateHandle
-                ) as T
             }
         }
     }
