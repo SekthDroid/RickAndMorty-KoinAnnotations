@@ -1,6 +1,5 @@
-package com.sekthdroid.projek.template.di
+package com.sekthdroid.projek.template.data
 
-import android.content.Context
 import android.util.Log
 import app.cash.sqldelight.driver.android.AndroidSqliteDriver
 import com.sekthdroid.projek.template.data.network.RestDatasource
@@ -14,16 +13,12 @@ import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
-import kotlin.properties.Delegates
+import org.koin.android.ext.koin.androidApplication
+import org.koin.core.qualifier.named
+import org.koin.dsl.module
 
-object Injector {
-    private var appContext: Context by Delegates.notNull()
-
-    fun init(context: Context) {
-        this.appContext = context
-    }
-
-    val httpClient by lazy {
+val dataModule = module {
+    single {
         HttpClient {
             install(Logging) {
                 level = LogLevel.ALL
@@ -43,19 +38,21 @@ object Injector {
         }
     }
 
-    val restDatasource by lazy {
-        RestDatasource(httpClient)
+    single(named("base_url")) { "https://rickandmortyapi.com/api" }
+
+    single {
+        RestDatasource(get())
     }
 
-    val sqliteDatasource by lazy {
-        SqliteDatasource(database)
+    single {
+        Database(AndroidSqliteDriver(Database.Schema, androidApplication(), "app.db"))
     }
 
-    val charactersRepository by lazy {
-        CharactersRepository(restDatasource, sqliteDatasource)
+    single {
+        SqliteDatasource(get())
     }
 
-    val database by lazy {
-        Database(AndroidSqliteDriver(Database.Schema, appContext, "app.db"))
+    single {
+        CharactersRepository(get(), get())
     }
 }

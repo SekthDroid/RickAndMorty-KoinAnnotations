@@ -16,17 +16,15 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.sekthdroid.projek.template.ui.screens.character.CharacterDetailScreen
-import com.sekthdroid.projek.template.ui.screens.character.CharacterDetailViewModel
 import com.sekthdroid.projek.template.ui.screens.characters.CharactersScreen
-import com.sekthdroid.projek.template.ui.screens.characters.CharactersViewModel
 import com.sekthdroid.projek.template.ui.theme.ProjektTemplateTheme
+import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalAnimationApi::class)
 class MainActivity : ComponentActivity() {
@@ -48,7 +46,7 @@ class MainActivity : ComponentActivity() {
                     ) {
                         composable("characters") {
                             CharactersScreen(
-                                viewModel = viewModel(factory = CharactersViewModel.Factory),
+                                viewModel = koinViewModel(),
                                 onCharacterClicked = {
                                     println("Navigation clicked")
                                     navController.navigate("character/${it}")
@@ -71,9 +69,8 @@ class MainActivity : ComponentActivity() {
                                 slideOutHorizontally { it }
                             },
                         ) {
-                            val id = it.arguments?.getInt("id")
                             CharacterDetailScreen(
-                                viewModel = viewModel(factory = CharacterDetailViewModel.create(id)),
+                                viewModel = koinViewModel(),
                                 onBackPressed = {
                                     navController.popBackStack()
                                 }

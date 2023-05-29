@@ -1,9 +1,7 @@
 package com.sekthdroid.projek.template.ui.screens.characters
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.sekthdroid.projek.template.di.Injector
 import com.sekthdroid.projek.template.domain.CharactersRepository
 import com.sekthdroid.projek.template.domain.model.SerieCharacter
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -43,14 +41,4 @@ class CharactersViewModel(
         }
     }
 
-    companion object {
-        @Suppress("UNCHECKED_CAST")
-        val Factory = object : ViewModelProvider.Factory {
-            override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                return CharactersViewModel(
-                    Injector.charactersRepository
-                ) as T
-            }
-        }
-    }
 }

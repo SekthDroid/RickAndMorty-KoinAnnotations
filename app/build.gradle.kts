@@ -101,6 +101,16 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.0")
 
+    // Koin
+    val koin_version = "3.4.0"
+    implementation("io.insert-koin:koin-core:$koin_version")
+    implementation("io.insert-koin:koin-androidx-compose:3.4.4")
+    implementation("io.insert-koin:koin-androidx-compose-navigation:3.4.4")
+
+    // Startup
+    implementation("androidx.startup:startup-runtime:1.1.1")
+
+    // Test
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
