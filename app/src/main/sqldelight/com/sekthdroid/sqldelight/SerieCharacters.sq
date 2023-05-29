@@ -1,0 +1,25 @@
+CREATE TABLE SerieCharacters
+(
+    id INTEGER PRIMARY KEY,
+    name TEXT NOT NULL,
+    image TEXT NOT NULL,
+    location TEXT NOT NULL,
+    origin TEXT NOT NULL
+ );
+
+getAll:
+SELECT id, name, image, location, origin
+FROM SerieCharacters;
+
+getById:
+SELECT id, name, image, location, origin
+FROM SerieCharacters
+WHERE id = ?;
+
+create:
+INSERT OR REPLACE INTO SerieCharacters
+VALUES ?;
+
+delete:
+DELETE FROM SerieCharacters
+WHERE id = ?;

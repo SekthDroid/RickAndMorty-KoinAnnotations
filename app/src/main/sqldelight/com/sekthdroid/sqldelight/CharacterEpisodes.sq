@@ -1,0 +1,6 @@
+CREATE TABLE CharacterEpisodes
+(
+    characterId INTEGER NOT NULL,
+    episodeId INTEGER NOT NULL,
+    PRIMARY KEY (characterId, episodeId)
+);
