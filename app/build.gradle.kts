@@ -4,6 +4,7 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     kotlin("plugin.serialization")
+    id("com.google.devtools.ksp")
     id("app.cash.sqldelight") version "2.0.0-alpha05"
 }
 
@@ -42,11 +43,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
     buildFeatures {
         compose = true
@@ -106,6 +107,8 @@ dependencies {
     implementation("io.insert-koin:koin-core:$koin_version")
     implementation("io.insert-koin:koin-androidx-compose:3.4.4")
     implementation("io.insert-koin:koin-androidx-compose-navigation:3.4.4")
+    implementation ("io.insert-koin:koin-annotations:1.2.0")
+    ksp("io.insert-koin:koin-ksp-compiler:1.2.0")
 
     // Startup
     implementation("androidx.startup:startup-runtime:1.1.1")

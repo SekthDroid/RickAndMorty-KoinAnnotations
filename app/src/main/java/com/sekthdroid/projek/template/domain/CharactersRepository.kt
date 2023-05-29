@@ -6,7 +6,9 @@ import com.sekthdroid.projek.template.data.network.toEpisode
 import com.sekthdroid.projek.template.data.sql.SqliteDatasource
 import com.sekthdroid.projek.template.domain.model.Episode
 import com.sekthdroid.projek.template.domain.model.SerieCharacter
+import org.koin.core.annotation.Single
 
+@Single
 class CharactersRepository(
     private val networkDatasource: RestDatasource,
     private val sqliteDatasource: SqliteDatasource

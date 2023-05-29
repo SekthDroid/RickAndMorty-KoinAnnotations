@@ -23,7 +23,7 @@ You want to learn if some persistence framework fit your needs?, you can impleme
 - Async library: Coroutines
 - Persistence: SqlDelight
 - Network: Ktor
-- DI: Koin
+- DI: Koin-Annotations
 
 ## Contributing
 

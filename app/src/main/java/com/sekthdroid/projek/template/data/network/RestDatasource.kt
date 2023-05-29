@@ -6,6 +6,8 @@ import io.ktor.client.request.get
 import io.ktor.http.ParametersBuilder
 import io.ktor.http.URLBuilder
 import io.ktor.http.appendPathSegments
+import org.koin.core.annotation.Named
+import org.koin.core.annotation.Single
 
 enum class Endpoints(val path: String) {
     Characters("character"),
@@ -16,9 +18,10 @@ enum class Endpoints(val path: String) {
     }
 }
 
+@Single
 class RestDatasource(
     private val client: HttpClient,
-    private val baseUrl: String = "https://rickandmortyapi.com/api"
+    @Named("base_url") private val baseUrl: String = "https://rickandmortyapi.com/api"
 ) {
 
     suspend fun getCharacters(page: Int = 0): List<CharacterApiModel> {

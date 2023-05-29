@@ -2,17 +2,18 @@ package com.sekthdroid.projek.template.initializer
 
 import android.content.Context
 import androidx.startup.Initializer
-import com.sekthdroid.projek.template.data.dataModule
-import com.sekthdroid.projek.template.ui.di.uiModule
+import com.sekthdroid.projek.template.data.DataModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.Koin
 import org.koin.core.context.startKoin
+import org.koin.ksp.generated.defaultModule
+import org.koin.ksp.generated.module
 
 class KoinInitializer : Initializer<Koin> {
     override fun create(context: Context): Koin {
         return startKoin {
             androidContext(context)
-            modules(dataModule, uiModule)
+            modules(DataModule().module, defaultModule)
         }.koin
     }
 

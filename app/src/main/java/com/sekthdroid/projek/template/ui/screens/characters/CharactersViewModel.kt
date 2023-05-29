@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.koin.android.annotation.KoinViewModel
 
 data class CharactersScreenState(
     val items: List<SerieCharacter> = emptyList(),
@@ -15,6 +16,7 @@ data class CharactersScreenState(
     val error: Throwable? = null
 )
 
+@KoinViewModel
 class CharactersViewModel(
     private val repository: CharactersRepository
 ) : ViewModel() {

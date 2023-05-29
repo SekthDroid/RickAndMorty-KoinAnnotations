@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.koin.android.annotation.KoinViewModel
 
 data class CharacterScreenState(
     val isLoading: Boolean = false,
@@ -17,6 +18,7 @@ data class CharacterScreenState(
     val episodes: List<Episode> = emptyList()
 )
 
+@KoinViewModel
 class CharacterDetailViewModel(
     private val repository: CharactersRepository,
     private val savedStateHandle: SavedStateHandle

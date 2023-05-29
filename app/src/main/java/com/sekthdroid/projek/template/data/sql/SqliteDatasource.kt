@@ -3,7 +3,9 @@ package com.sekthdroid.projek.template.data.sql
 import com.sekthdroid.projek.template.domain.model.Episode
 import com.sekthdroid.projek.template.domain.model.SerieCharacter
 import com.sekthdroid.projekt.data.Database
+import org.koin.core.annotation.Single
 
+@Single
 class SqliteDatasource(private val database: Database) {
     fun getCharacters(): List<SerieCharacter> {
         return database.serieCharactersQueries.getAll()

@@ -1,10 +1,8 @@
 package com.sekthdroid.projek.template.data
 
+import android.app.Application
 import android.util.Log
 import app.cash.sqldelight.driver.android.AndroidSqliteDriver
-import com.sekthdroid.projek.template.data.network.RestDatasource
-import com.sekthdroid.projek.template.data.sql.SqliteDatasource
-import com.sekthdroid.projek.template.domain.CharactersRepository
 import com.sekthdroid.projekt.data.Database
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -13,13 +11,18 @@ import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
-import org.koin.android.ext.koin.androidApplication
-import org.koin.core.qualifier.named
-import org.koin.dsl.module
+import org.koin.core.annotation.ComponentScan
+import org.koin.core.annotation.Module
+import org.koin.core.annotation.Named
+import org.koin.core.annotation.Single
 
-val dataModule = module {
-    single {
-        HttpClient {
+@Module
+@ComponentScan
+class DataModule {
+
+    @Single
+    fun provideClient(): HttpClient {
+        return HttpClient {
             install(Logging) {
                 level = LogLevel.ALL
                 logger = object : Logger {
@@ -38,21 +41,12 @@ val dataModule = module {
         }
     }
 
-    single(named("base_url")) { "https://rickandmortyapi.com/api" }
+    @Single
+    @Named("base_url")
+    fun provideBaseUrl(): String = "https://rickandmortyapi.com/api"
 
-    single {
-        RestDatasource(get())
-    }
-
-    single {
-        Database(AndroidSqliteDriver(Database.Schema, androidApplication(), "app.db"))
-    }
-
-    single {
-        SqliteDatasource(get())
-    }
-
-    single {
-        CharactersRepository(get(), get())
+    @Single
+    fun provideDatabase(application: Application): Database {
+        return Database(AndroidSqliteDriver(Database.Schema, application, "app.db"))
     }
 }
